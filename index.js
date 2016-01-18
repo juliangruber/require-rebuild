@@ -1,7 +1,7 @@
 var spawnSync = require('child_process').spawnSync;
 var extend = require('extend');
 var Module = require('module');
-var join = require('path').join;
+var resolve = require('path').resolve;
 var dirname = require('path').dirname;
 
 module.exports = patch;
@@ -9,7 +9,7 @@ module.exports = patch;
 function patch(opts){
   var load = Module._load;
   Module._load = function(request, parent){
-    var path = join(dirname(parent.id), request);
+    var path = resolve(dirname(parent.id), request);
 
     var ret;
     try {
