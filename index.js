@@ -21,7 +21,7 @@ function patch(opts){
       var match = /^(.*)\/node_modules\/([^\/]+)/.exec(path);
       path = match[0];
 
-      console.error('Recompiling %s (%s)', request, path);
+      process.stderr.write('Recompiling ' + path + '...');
 
       var ps = spawnSync('node-gyp', [
         'rebuild',
@@ -33,7 +33,7 @@ function patch(opts){
         })
       });
       if (ps.error) throw ps.error;
-      console.error('Recompiled %s', request);
+      process.stderr.write('Done!\n');
       return load.call(Module, request, parent);
     }
     return ret;
