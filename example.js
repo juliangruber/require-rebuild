@@ -1,3 +1,3 @@
 require('./')();
 
-console.log('Got module', !!require('nsq.js'));
+console.log('Got module', !!require('frida'));

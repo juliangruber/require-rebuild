@@ -20,6 +20,13 @@ $ node example.js
 Recompiling /Users/julian/dev/juliangruber/require-recompile/node_modules/bignum...Done!
 ```
 
+## Build systems
+
+At this moment, those build systems are supported
+
+- `node-gyp`
+- `prebuild`
+
 ## License
 
   MIT
