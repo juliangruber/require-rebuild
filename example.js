@@ -1,3 +1,7 @@
-require('./')();
+// to run this: 
+// node example.js
+// or
+// ./node_modules/.bin/electron example.js
 
-console.log('Got module', !!require('frida'));
+require('./')();
+console.log('got module', !!require('frida'));

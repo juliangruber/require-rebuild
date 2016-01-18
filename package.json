@@ -9,6 +9,7 @@
     "prebuild": "github:mafintosh/prebuild"
   },
   "devDependencies": {
+    "electron-prebuilt": "^0.36.4",
     "frida": "^6.1.1",
     "nsq.js": "^0.14.5"
   }
