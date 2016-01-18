@@ -1,3 +1,3 @@
 require('./')();
 
-console.log('Got bignum', !!require('bignum'));
+console.log('Got module', !!require('nsq.js'));
