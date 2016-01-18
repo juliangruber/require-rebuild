@@ -1,22 +1,27 @@
 var spawnSync = require('child_process').spawnSync;
 var extend = require('extend');
+var Module = require('module');
+var join = require('path').join;
+var dirname = require('path').dirname;
 
 module.exports = patch;
 
 function patch(opts){
-  var orig = require;
-  require = function(id){
+  var load = Module._load;
+  Module._load = function(request, parent){
+    var path = join(dirname(parent.id), request);
+
     var ret;
     try {
-      ret = orig(id);
+      ret = load.call(Module, request, parent);
     } catch (err) {
       if (!/Module version mismatch/.test(err.message)) throw err;
 
-      var path = require.resolve(id);
+      var path = require.resolve(path);
       var match = /^(.*)\/node_modules\/([^\/]+)/.exec(path);
       path = match[0];
 
-      console.error('Recompiling %s (%s)', id, path);
+      console.error('Recompiling %s (%s)', request, path);
 
       var ps = spawnSync('node-gyp', [
         'rebuild',
@@ -28,14 +33,11 @@ function patch(opts){
         })
       });
       if (ps.error) throw ps.error;
-      console.error('Recompiled %s', id);
-      delete orig.cache[id];
-      return orig(id);
+      console.error('Recompiled %s', request);
+      return load.call(Module, request, parent);
     }
     return ret;
   };
-  require.cache = orig.cache;
-  require.resolve = orig.resolve;
   return require;
 }
 

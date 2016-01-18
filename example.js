@@ -1,3 +1,3 @@
-require = require('./')();
+require('./')();
 
-console.log(require('bignum'));
+console.log('Got bignum', !!require('bignum'));
