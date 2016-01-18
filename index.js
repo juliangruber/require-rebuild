@@ -29,8 +29,8 @@ function patch(opts){
       });
       if (ps.error) throw ps.error;
       console.error('Recompiled %s', id);
-      delete orig.cache[path];
-      return orig(path);
+      delete orig.cache[id];
+      return orig(id);
     }
     return ret;
   };
