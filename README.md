@@ -1,7 +1,7 @@
 
 # require-recompile
 
-  Path `require()` to recompile a node module if it has been built for a different node version.
+  Patch `require()` to recompile a node module if it has been built for a different node version.
 
 ## Usage
 
