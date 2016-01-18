@@ -1,0 +1,13 @@
+{
+  "name": "require-rebuild",
+  "version": "1.0.0",
+  "license": "MIT",
+  "repository": "juliangruber/require-rebuild",
+  "description": "Rebuild modules if built for a different node versions",
+  "dependencies": {
+    "extend": "^3.0.0"
+  },
+  "devDependencies": {
+    "bignum": "^0.11.0"
+  }
+}
