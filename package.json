@@ -9,6 +9,8 @@
     "prebuild": "github:mafintosh/prebuild"
   },
   "devDependencies": {
+    "a-native-module": "juliangruber/a-native-module",
+    "a-native-module-without-prebuild": "^1.4.3",
     "electron-prebuilt": "^0.36.4",
     "frida": "^6.1.1",
     "nsq.js": "^0.14.5"

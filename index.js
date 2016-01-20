@@ -20,7 +20,7 @@ function patch(opts){
       var match = /^(.*)\/node_modules\/([^\/]+)/.exec(path);
       path = match[0];
 
-      process.stderr.write('Recompiling ' + path + '...');
+      console.error('Recompiling ' + path + '...');
 
       // prebuild or node-gyp
       var pkg = require(join(path, 'package.json'));
@@ -34,22 +34,24 @@ function patch(opts){
           '--install',
           '--abi=' + process.versions.modules
         ], {
-          cwd: path
+          cwd: path,
+          stdio: 'inherit'
         });
       } else {
         ps = spawnSync('node-gyp', [
           'rebuild',
-          '--target=' + process.versions.node,
+          '--target=' + process.versions.node
         ], {
           cwd: path,
           env: extend(process.env, {
             'HOME': process.env.HOME + "/.node-gyp"   
-          })
+          }),
+          stdio: 'inherit'
         });
       }
 
       if (ps.error) throw ps.error;
-      process.stderr.write('Done!\n');
+      console.error('Done!');
       return load.call(Module, request, parent);
     }
     return ret;
