@@ -19,7 +19,7 @@ require('require-rebuild')();
 
 ```bash
 $ node example.js
-Recompiling /Users/julian/dev/juliangruber/require-rebuild/node_modules/bignum
+Recompiling node_modules/bignum
 CXX(target) Release/obj.target/bignum/bignum.o
 SOLINK_MODULE(target) Release/bignum.node
 Done!

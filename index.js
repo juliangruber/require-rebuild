@@ -4,6 +4,7 @@ var Module = require('module');
 var resolve = require('path').resolve;
 var dirname = require('path').dirname;
 var join = require('path').join;
+var relative = require('path').relative;
 
 module.exports = patch;
 
@@ -20,7 +21,7 @@ function patch(opts){
       var match = /^(.*)\/node_modules\/([^\/]+)/.exec(path);
       path = match[0];
 
-      console.error('Recompiling ' + path + '...');
+      console.error('Recompiling ' + relative(process.cwd(), path) + '...');
 
       // prebuild or node-gyp
       var pkg = require(join(path, 'package.json'));
