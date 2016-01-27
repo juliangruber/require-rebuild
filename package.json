@@ -7,7 +7,8 @@
   "dependencies": {
     "cross-spawn": "~2.1.5",
     "extend": "^3.0.0",
-    "prebuild": "^2.9.0"
+    "prebuild": "^2.9.0",
+    "resolve": "^1.1.7"
   },
   "devDependencies": {
     "a-native-module": "juliangruber/a-native-module",

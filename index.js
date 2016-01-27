@@ -1,7 +1,7 @@
 var spawnSync = require('cross-spawn').sync;
 var extend = require('extend');
 var Module = require('module');
-var resolve = require('path').resolve;
+var resolveSync = require('resolve').sync;
 var dirname = require('path').dirname;
 var join = require('path').join;
 var relative = require('path').relative;
@@ -21,7 +21,11 @@ function patch(opts){
     } catch (err) {
       if (!mismatchRe.test(err.message) && !winRe.test(err.message)) throw err;
 
-      var segs = resolve(dirname(parent.id), request).split(sep);
+      var resolved = resolveSync(request, {
+        basedir: dirname(parent.id),
+        extensions: ['.js', '.json', '.node']
+      });
+      var segs = resolved.split(sep);
       var path = segs.slice(0, segs.indexOf('node_modules') + 2).join(sep);
 
       console.error('Recompiling %s...', relative(process.cwd(), path));
