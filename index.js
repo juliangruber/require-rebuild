@@ -7,8 +7,8 @@ var join = require('path').join;
 var relative = require('path').relative;
 var sep = require('path').sep;
 
-var mismatchRe = /Module version mismatch/
-var winRe = /A dynamic link library \(DLL\) initialization routine failed/
+var mismatchRe = /Module version mismatch/;
+var winRe = /A dynamic link library \(DLL\) initialization routine failed/;
 
 module.exports = patch;
 
@@ -19,7 +19,7 @@ function patch(opts){
     try {
       ret = load.call(Module, request, parent);
     } catch (err) {
-      if (!mismatchRe.test(err.message) && !winRe.test(err.message)) throw err
+      if (!mismatchRe.test(err.message) && !winRe.test(err.message)) throw err;
 
       var segs = resolve(dirname(parent.id), request).split(sep);
       var path = segs.slice(0, segs.indexOf('node_modules') + 2).join(sep);
@@ -34,7 +34,7 @@ function patch(opts){
       var ps;
 
       if (prebuild) {
-        var bin = join(require.resolve('prebuild'), '../bin.js')
+        var bin = join(require.resolve('prebuild'), '../bin.js');
         ps = spawnSync(bin, [
           '--install',
           '--abi=' + process.versions.modules
