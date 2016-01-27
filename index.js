@@ -41,7 +41,8 @@ function patch(opts){
         var bin = join(require.resolve('prebuild'), '../bin.js');
         ps = spawnSync(bin, [
           '--install',
-          '--abi=' + process.versions.modules
+          '--abi=' + process.versions.modules,
+          '--target=' + process.versions.node
         ], {
           cwd: path,
           stdio: 'inherit'
