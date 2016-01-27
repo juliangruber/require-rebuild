@@ -3,7 +3,7 @@
 
   Patch `require()` to rebuild a node module if it has been built for a different node version.
 
-  Works with _electron_ as well!
+  Works with _electron_ as well and has been tested on OSX and Windows.
 
 ## Usage
 
