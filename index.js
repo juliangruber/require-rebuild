@@ -10,6 +10,7 @@ var home = require('user-home');
 
 var mismatchRe = /Module version mismatch/;
 var winRe = /A dynamic link library \(DLL\) initialization routine failed/;
+var gypHome = join(home, '.node-gyp');
 
 module.exports = patch;
 
@@ -55,7 +56,8 @@ function patch(opts){
         ], {
           cwd: path,
           env: extend(process.env, {
-            'HOME': join(home, '.node-gyp')
+            'HOME': gypHome,
+            'USERPROFILE': gypHome
           }),
           stdio: 'inherit'
         });
