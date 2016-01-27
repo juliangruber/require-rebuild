@@ -6,6 +6,7 @@ var dirname = require('path').dirname;
 var join = require('path').join;
 var relative = require('path').relative;
 var sep = require('path').sep;
+var home = require('user-home');
 
 var mismatchRe = /Module version mismatch/;
 var winRe = /A dynamic link library \(DLL\) initialization routine failed/;
@@ -54,7 +55,7 @@ function patch(opts){
         ], {
           cwd: path,
           env: extend(process.env, {
-            'HOME': join(process.env.HOME, '.node-gyp')
+            'HOME': join(home, '.node-gyp'),
           }),
           stdio: 'inherit'
         });
