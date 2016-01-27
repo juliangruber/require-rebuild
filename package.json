@@ -5,6 +5,7 @@
   "repository": "juliangruber/require-rebuild",
   "description": "Rebuild modules if built for a different node versions",
   "dependencies": {
+    "cross-spawn": "~2.1.5",
     "extend": "^3.0.0",
     "prebuild": "^2.9.0"
   },

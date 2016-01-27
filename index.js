@@ -1,10 +1,14 @@
-var spawnSync = require('child_process').spawnSync;
+var spawnSync = require('cross-spawn').sync;
 var extend = require('extend');
 var Module = require('module');
 var resolve = require('path').resolve;
 var dirname = require('path').dirname;
 var join = require('path').join;
 var relative = require('path').relative;
+var sep = require('path').sep;
+
+var mismatchRe = /Module version mismatch/
+var winRe = /A dynamic link library \(DLL\) initialization routine failed/
 
 module.exports = patch;
 
@@ -15,11 +19,10 @@ function patch(opts){
     try {
       ret = load.call(Module, request, parent);
     } catch (err) {
-      if (!/Module version mismatch/.test(err.message)) throw err;
+      if (!mismatchRe.test(err.message) && !winRe.test(err.message)) throw err
 
-      var path = resolve(dirname(parent.id), request);
-      var match = /^(.*)\/node_modules\/([^\/]+)/.exec(path);
-      path = match[0];
+      var segs = resolve(dirname(parent.id), request).split(sep);
+      var path = segs.slice(0, segs.indexOf('node_modules') + 2).join(sep);
 
       console.error('Recompiling ' + relative(process.cwd(), path) + '...');
 
@@ -46,7 +49,7 @@ function patch(opts){
         ], {
           cwd: path,
           env: extend(process.env, {
-            'HOME': process.env.HOME + "/.node-gyp"   
+            'HOME': join(process.env.HOME, '.node-gyp')
           }),
           stdio: 'inherit'
         });
@@ -60,4 +63,3 @@ function patch(opts){
   };
   return require;
 }
-
