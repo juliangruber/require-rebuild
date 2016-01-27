@@ -4,4 +4,7 @@
 // ./node_modules/.bin/electron example.js
 
 require('./')();
-console.log('got module:', !!require('frida'));
+require('frida');
+require('a-native-module');
+require('a-native-module-without-prebuild');
+require('nsq.js');
