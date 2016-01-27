@@ -4,4 +4,4 @@
 // ./node_modules/.bin/electron example.js
 
 require('./')();
-console.log('got module:', !!require('a-native-module'));
+console.log('got module:', !!require('frida'));

@@ -31,7 +31,8 @@ function patch(opts){
       var ps;
 
       if (prebuild) {
-        ps = spawnSync(join(__dirname, 'node_modules', '.bin', 'prebuild'), [
+        var bin = join(require.resolve('prebuild'), '../bin.js')
+        ps = spawnSync(bin, [
           '--install',
           '--abi=' + process.versions.modules
         ], {
