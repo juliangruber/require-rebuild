@@ -24,7 +24,7 @@ function patch(opts){
       var segs = resolve(dirname(parent.id), request).split(sep);
       var path = segs.slice(0, segs.indexOf('node_modules') + 2).join(sep);
 
-      console.error('Recompiling ' + relative(process.cwd(), path) + '...');
+      console.error('Recompiling %s...', relative(process.cwd(), path));
 
       // prebuild or node-gyp
       var pkg = require(join(path, 'package.json'));
