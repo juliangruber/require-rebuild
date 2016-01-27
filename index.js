@@ -55,7 +55,7 @@ function patch(opts){
         ], {
           cwd: path,
           env: extend(process.env, {
-            'HOME': join(home, '.node-gyp'),
+            'HOME': join(home, '.node-gyp')
           }),
           stdio: 'inherit'
         });
