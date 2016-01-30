@@ -13,6 +13,7 @@ var mismatchRe = /Module version mismatch/;
 var winRe = /A dynamic link library \(DLL\) initialization routine failed/;
 var legacyRe = /undefined symbol: node_module_register/;
 var gypHome = join(home, '.node-gyp');
+var visited = {}
 
 module.exports = patch;
 
@@ -67,6 +68,9 @@ function shouldRebuild(path) {
 function rebuild(path) {
   var segs = path.split(sep);
   var root = segs.slice(0, segs.indexOf('node_modules') + 2).join(sep);
+
+  if (visited[root]) return;
+  else visited[root] = true;
 
   console.error('Recompiling %s...', relative(process.cwd(), root));
 
