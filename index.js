@@ -11,6 +11,7 @@ var home = require('user-home');
 
 var mismatchRe = /Module version mismatch/;
 var winRe = /A dynamic link library \(DLL\) initialization routine failed/;
+var legacyRe = /undefined symbol: node_module_register/;
 var gypHome = join(home, '.node-gyp');
 
 module.exports = patch;
@@ -105,7 +106,7 @@ function rebuild(path) {
 }
 
 function isMismatchError(msg) {
-  return mismatchRe.test(msg) || winRe.test(msg);
+  return mismatchRe.test(msg) || winRe.test(msg) || legacyRe.test(msg);
 }
 
 function resolveRequest(request, parent) {
