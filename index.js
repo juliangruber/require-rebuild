@@ -9,9 +9,14 @@ var sep = require('path').sep;
 var extname = require('path').extname;
 var home = require('user-home');
 
-var mismatchRe = /Module version mismatch/;
-var winRe = /A dynamic link library \(DLL\) initialization routine failed/;
-var legacyRe = /undefined symbol: node_module_register/;
+var regexes = [
+  /Module version mismatch/i, // modern
+  /A dynamic link library \(DLL\) initialization routine failed/i, // windows
+  /Module did not self-register/i, // modern node requiring a 0.10 module
+  /undefined symbol: node_module_register/i, // 0.10 linux
+  /Symbol not found: _node_module_register/i // 0.10 mac
+];
+
 var gypHome = join(home, '.node-gyp');
 var visited = {}
 
@@ -19,10 +24,10 @@ module.exports = patch;
 
 function patch(opts){
   var load = Module._load;
-  var version = process.versions.node.split('.');
 
-  // node 0.10 segfaults if the native module fails to load
-  if (version[0] === '0' && version[1] === '10' && false) {
+  // node 0.10 on windows segfaults if the native module fails to load.
+  // same if node 4+ tries to load a 0.10 module.
+  if (process.platform === 'win32') {
     Module._load = function(request, parent){
       if (extname(request) === '.node') {
         var resolved = resolveRequest(request, parent);
@@ -58,7 +63,7 @@ function shouldRebuild(path) {
   });
 
   if (ps.error) throw ps.error;
-  if (ps.status === 0) return false;
+  if (ps.status === 0 || ps.status == null) return false;
 
   var stderr = ps.stderr.toString();
   if (isMismatchError(stderr)) return true;
@@ -110,7 +115,9 @@ function rebuild(path) {
 }
 
 function isMismatchError(msg) {
-  return mismatchRe.test(msg) || winRe.test(msg) || legacyRe.test(msg);
+  for (var i=0; i < regexes.length; i++) {
+    if (regexes[i].test(msg)) return true
+  }
 }
 
 function resolveRequest(request, parent) {

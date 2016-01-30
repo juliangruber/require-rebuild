@@ -14,6 +14,7 @@ function run(mod, t) {
 
   ps.on('error', t.fail.bind(t));
   ps.on('close', function(code){
+    if (code == null) code = 0;
     t.is(code, 0, 'exit code is 0');
 
     if (code !== 0) {
