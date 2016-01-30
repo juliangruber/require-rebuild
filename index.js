@@ -21,7 +21,7 @@ function patch(opts){
   var version = process.versions.node.split('.');
 
   // node 0.10 segfaults if the native module fails to load
-  if (version[0] === '0' && version[1] === '10') {
+  if (version[0] === '0' && version[1] === '10' && false) {
     Module._load = function(request, parent){
       if (extname(request) === '.node') {
         var resolved = resolveRequest(request, parent);
