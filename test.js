@@ -1,7 +1,7 @@
 var spawn = require('cross-spawn');
 var test = require('tape');
 
-function run(mod, t) {
+function run(mod, t){
   t.plan(1);
 
   var buf = '';
@@ -26,7 +26,7 @@ function run(mod, t) {
 
   ps.stderr.on('data', function(chunk) {
     buf+= chunk;
-  })
+  });
 }
 
 var modules = [

@@ -18,7 +18,7 @@ var regexes = [
 ];
 
 var gypHome = join(home, '.node-gyp');
-var visited = {}
+var visited = {};
 
 module.exports = patch;
 
@@ -51,7 +51,7 @@ function patch(opts){
   return require;
 }
 
-function shouldRebuild(path) {
+function shouldRebuild(path){
   // Try to require the native module in a second process.
   // It will still segfault, but.. fingers crossed?
   var ps = spawnSync('node', [
@@ -70,7 +70,7 @@ function shouldRebuild(path) {
   else throw new Error(stderr);
 }
 
-function rebuild(path) {
+function rebuild(path){
   var segs = path.split(sep);
   var root = segs.slice(0, segs.indexOf('node_modules') + 2).join(sep);
 
@@ -114,13 +114,13 @@ function rebuild(path) {
   console.error('Done!');
 }
 
-function isMismatchError(msg) {
+function isMismatchError(msg){
   for (var i=0; i < regexes.length; i++) {
-    if (regexes[i].test(msg)) return true
+    if (regexes[i].test(msg)) return true;
   }
 }
 
-function resolveRequest(request, parent) {
+function resolveRequest(request, parent){
   return resolveSync(request, {
     basedir: dirname(parent.id),
     extensions: ['.js', '.json', '.node']
