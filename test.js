@@ -2,30 +2,37 @@ var spawn = require('cross-spawn');
 var test = require('tape');
 
 function run(mod, t){
-  t.plan(1);
+  t.plan(3);
 
-  var buf = '';
+  var stderr = '';
+  var stdout = '';
+
   var ps = spawn('node', [
-    '-e',
-    'require("./")();require("' + mod + '")'
+    '-p',
+    'require("./")();require("' + mod + '");"ok"'
   ], {
-    stdio: [ 'ignore', 'ignore', 'pipe' ]
+    stdio: [ 'ignore', 'pipe', 'pipe' ]
   });
 
   ps.on('error', t.fail.bind(t));
-  ps.on('close', function(code){
-    if (code == null) code = 0;
-    t.is(code, 0, 'exit code is 0');
-
+  ps.on('close', function(code, signal){
     if (code !== 0) {
-      buf.split(/[\r\n]+/).forEach(function(line){
-        if (line.trim()) t.comment(line);
+      stderr.split(/[\r\n]+/).forEach(function(line){
+        if (line.trim()) t.comment('  ' + line);
       });
     }
+
+    t.is(code, 0, 'exit code is 0');
+    t.is(signal, null, 'signal is null');
+    t.is(stdout.trim().split(/[\r\n]+/).pop(), 'ok', 'output ok');
   })
 
   ps.stderr.on('data', function(chunk) {
-    buf+= chunk;
+    stderr+= chunk;
+  });
+
+  ps.stdout.on('data', function(chunk) {
+    stdout+= chunk;
   });
 }
 

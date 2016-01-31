@@ -14,7 +14,7 @@ var regexes = [
   /A dynamic link library \(DLL\) initialization routine failed/i, // windows
   /Module did not self-register/i, // modern node requiring a 0.10 module
   /undefined symbol: node_module_register/i, // 0.10 linux
-  /Symbol not found: _node_module_register/i // 0.10 mac
+  /Symbol not found: _node_module_register/i // 0.10 osx
 ];
 
 var gypHome = join(home, '.node-gyp');
@@ -23,10 +23,15 @@ module.exports = patch;
 
 function patch(opts){
   var load = Module._load;
+  var version = process.versions.node.split('.');
+  var isWindows = process.platform === 'win32';
+  var isDarwinLegacy = process.platform === 'darwin' && version[0] === '0';
 
-  // node 0.10 on windows segfaults if the native module fails to load.
-  // same if node 4+ tries to load a 0.10 module.
-  if (process.platform === 'win32') {
+  // Do a pre-test for the special cases.
+  // Node 0.10 on Windows segfaults if the native module fails to load.
+  // Same if Node 4+ tries to load a 0.10 module.
+  // Node 0.10 on OSX doesn't throw an error, but exits with a SIGTRAP.
+  if (isWindows || isDarwinLegacy) {
     Module._load = function(request, parent){
       if (extname(request) === '.node') {
         var resolved = resolveRequest(request, parent);
@@ -57,7 +62,7 @@ function patch(opts){
 
 function shouldRebuild(path){
   // Try to require the native module in a second process.
-  // It will still segfault, but.. fingers crossed?
+  // It will still segfault on Windows, but.. fingers crossed?
   var ps = spawnSync('node', [
     '-e',
     'require("' + path.replace(/\\/g, '/') + '")'
@@ -67,7 +72,7 @@ function shouldRebuild(path){
   });
 
   if (ps.error) throw ps.error;
-  if (ps.status === 0 || ps.status == null) return false;
+  if (ps.status === 0) return false;
 
   var stderr = ps.stderr.toString();
   if (isMismatchError(stderr)) return true;
