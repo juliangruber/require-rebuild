@@ -18,7 +18,6 @@ var regexes = [
 ];
 
 var gypHome = join(home, '.node-gyp');
-var visited = {};
 
 module.exports = patch;
 
@@ -31,7 +30,8 @@ function patch(opts){
     Module._load = function(request, parent){
       if (extname(request) === '.node') {
         var resolved = resolveRequest(request, parent);
-        if (shouldRebuild(resolved)) rebuild(resolved);
+        var root = moduleRoot(resolved);
+        if (!visited(root) && shouldRebuild(resolved)) rebuild(root);
       }
 
       return load.call(Module, request, parent);
@@ -42,7 +42,11 @@ function patch(opts){
         return load.call(Module, request, parent);
       } catch (err) {
         if (!isMismatchError(err.message)) throw err;
-        rebuild(resolveRequest(request, parent));
+
+        var root = moduleRoot(resolveRequest(request, parent));
+        if (visited(root)) throw err;
+
+        rebuild(root);
         return load.call(Module, request, parent);
       }
     };
@@ -70,13 +74,7 @@ function shouldRebuild(path){
   else throw new Error(stderr);
 }
 
-function rebuild(path){
-  var segs = path.split(sep);
-  var root = segs.slice(0, segs.indexOf('node_modules') + 2).join(sep);
-
-  if (visited[root]) return;
-  else visited[root] = true;
-
+function rebuild(root){
   console.error('Recompiling %s...', relative(process.cwd(), root));
 
   // prebuild or node-gyp
@@ -125,4 +123,15 @@ function resolveRequest(request, parent){
     basedir: dirname(parent.id),
     extensions: ['.js', '.json', '.node']
   });
+}
+
+function visited(root){
+  var cache = visited.cache || (visited.cache = {});
+  if (cache[root]) return true;
+  else cache[root] = true;
+}
+
+function moduleRoot(resolved){
+  var segs = resolved.split(sep);
+  return segs.slice(0, segs.indexOf('node_modules') + 2).join(sep);
 }
