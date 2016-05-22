@@ -28,7 +28,8 @@ function patch(opts){
         extensions: ['.js', '.json', '.node']
       });
       var segs = resolved.split(sep);
-      var path = segs.slice(0, segs.indexOf('node_modules') + 2).join(sep);
+      var path = segs.slice(0, segs.indexOf('node_modules') + 2).join(sep)
+        || process.cwd();
 
       console.error('Recompiling %s...', relative(process.cwd(), path));
 
