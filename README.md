@@ -25,6 +25,10 @@ SOLINK_MODULE(target) Release/bignum.node
 Done!
 ```
 
+## General warning
+
+This belongs into application code, not into a lib. Better leave it to a lib's consumer how to build their dependencies.
+
 ## Build systems
 
 At this moment, those build systems are supported
