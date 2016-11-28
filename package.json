@@ -8,16 +8,16 @@
     "test": "node -v && node test.js"
   },
   "dependencies": {
-    "cross-spawn": "~2.1.5",
+    "cross-spawn": "~5.0.1",
     "extend": "^3.0.0",
-    "prebuild": "^2.9.0",
+    "prebuild": "^4.4.0",
     "resolve": "^1.1.7",
     "user-home": "^2.0.0"
   },
   "devDependencies": {
     "a-native-module": "juliangruber/a-native-module",
     "a-native-module-without-prebuild": "^1.4.3",
-    "electron-prebuilt": "^0.36.4",
-    "tape": "~4.4.0"
+    "electron-prebuilt": "^1.4.8",
+    "tape": "~4.6.3"
   }
 }
